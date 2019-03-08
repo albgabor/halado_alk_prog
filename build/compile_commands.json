@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/albgabor/halado_alk_prog/build",
-  "command": "/usr/bin/g++-7    -g   -o CMakeFiles/ora_3.dir/main.cpp.o -c /home/albgabor/halado_alk_prog/main.cpp",
-  "file": "/home/albgabor/halado_alk_prog/main.cpp"
-}
-]
