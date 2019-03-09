@@ -23,7 +23,7 @@ std::array<double, 2> fit_line(const std::vector<double>& x_vals,
             return std::array<double, 2> {d_inf, d_inf};
         //Checks if the size of vectors are the same.
         } else if (x_size!=y_size) {
-            std::cout << "Size of the two vectors is not equal!\n\n";
+            std::cout << "Sizes of the two vectors are not equal!\n\n";
             return std::array<double, 2> {d_inf, d_inf};
         //Checks if not all the elements are the same in 'x'.
         } else if (std::count(x_vals.begin(), x_vals.end(), x_vals.front())==x_size) {
@@ -37,16 +37,12 @@ std::array<double, 2> fit_line(const std::vector<double>& x_vals,
     double x_avg=std::accumulate(x_vals.begin(), x_vals.end(), 0.0)/x_size;
     double y_avg=std::accumulate(y_vals.begin(), y_vals.end(), 0.0)/y_size;
     
-    double xy=0.0;
+    double xy=std::inner_product(x_vals.begin(), x_vals.end(), y_vals.begin(), 0.0,
+                                 [&](const double& acc, const double& product){return acc+product;},
+                                 [&](const double& x, const double& y){return (x-x_avg)*(y-y_avg);});
     
-    for (int k=0; k<x_size; ++k) {
-        xy+=(x_vals[k]-x_avg)*(y_vals[k]-y_avg);
-    }
-    
-    double xx=0.0;
-    for (auto x_item : x_vals) {
-        xx+=std::pow((x_item-x_avg), 2);
-    }
+    double xx=std::accumulate(x_vals.begin(), x_vals.end(), 0.0,
+                              [&](const double& acc, const double& x){return acc+pow((x-x_avg), 2);});
     
     double a=xy/xx;
     
@@ -57,6 +53,17 @@ int main()
 {
     const std::vector<double> x={3.5, 5.1, 7.2, 9.8, 10.3};
     const std::vector<double> y={8.2, 11.0, 15.3, 20.9, 21.2}; //2*x+1+epsilon
+//Examples for bad inputs
+    //const std::vector<double> x={3.5, 5.1, 7.2, 9.8, 10.3};
+    //const std::vector<double> y={8.2, 11.0, 15.3, 20.9};
+    //-----------------------------------------------------
+    //const std::vector<double> x={3.5};
+    //const std::vector<double> y={8.2};
+    //-----------------------------------------------------
+    //const std::vector<double> x={3.5, 3.5, 3.5, 3.5, 3.5};
+    //const std::vector<double> y={8.2, 11.0, 15.3, 20.9, 21.2};
+    
+    
     //fitted parameters via gnuplot
     const double a_gp=1.97725426614733;
     const double b_gp=1.12331436781433;
@@ -65,7 +72,7 @@ int main()
     std::array<double, 2> fit = fit_line(x, y);
     
     if ((fit[0] == d_inf) || (fit[1] == d_inf)) {
-        std::cout << "Az illesztés nem sikerült!";
+        std::cout << "Fit didn't succeed!";
         return 1;
     } else {
         std::cout.precision(15);
@@ -74,7 +81,5 @@ int main()
                   << "a_err= " << 100*(a_gp-fit[0])/a_gp << "%\tb_err= " << 100*(b_gp-fit[1])/b_gp << "%\n"
                   << "(err=100*(ref-fit)/ref %)\n\n";
         return 0;
-    }          
-    
-    
+    }              
 }
