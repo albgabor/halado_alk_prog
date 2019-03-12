@@ -17,7 +17,7 @@ std::array<double, 2> fit_line(const std::vector<double>& x_vals,
     int y_size=y_vals.size();
 
     if (do_checks) {
-        //Cheks if there are enough elements in vectors.
+        //Checks if there are enough elements in vectors.
         if (x_size<2 || y_size<2){
             std::cout << "Not enough element in arrays!\n\n";
             return std::array<double, 2> {d_inf, d_inf};
@@ -71,7 +71,7 @@ int main()
     
     std::array<double, 2> fit = fit_line(x, y);
     
-    if ((fit[0] == d_inf) || (fit[1] == d_inf)) {
+    if (std::isinf(fit[0]) || std::isinf(fit[1])) {
         std::cout << "Fit didn't succeed!";
         return 1;
     } else {
