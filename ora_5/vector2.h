@@ -69,20 +69,20 @@ T sqlength (Vector2<T> const & a){
 
 //The type of return value will be double in all cases!!!
 template <typename T>
-double length (Vector2<T> const & a){
+auto length (Vector2<T> const & a){
     return std::sqrt(sqlength(a));
 }
 
  //The type of return value will be Vector2<double> in all cases!!!
 template <typename T>
-Vector2<double> normalize (Vector2<T> const & a){
+Vector2<T> normalize (Vector2<T> const & a){
     
     if ((a.x == T(0)) && (a.y == T(0))) {
         std::cout << "The (0, 0) vector can't be normalized! (0.0, 0.0) is returned.\n";
-        return Vector2<double>{0.0, 0.0};
+        return Vector2<T>{0, 0};
     } else {
-        double len=sqlength(a);
-        return Vector2<double> {a.x/len, a.y/len};
+        auto len=length(a);
+        return Vector2<T> {T(a.x/len), T(a.y/len)};
     }
 }
 
