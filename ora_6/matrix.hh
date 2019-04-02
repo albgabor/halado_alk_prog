@@ -21,12 +21,28 @@ struct Matrix
     }
 
 
-    Matrix()=default;
-    Matrix(Matrix const &)=default;
-    Matrix(Matrix &&)=default;
+    Matrix():N{0}, M{0}, data{std::vector<T>()} {}
+    Matrix(int nn, int mm):N{nn}, M{mm}, data{std::vector<T>(nn*mm)} {}
+    Matrix(int nn, int mm, std::vector<T> const & v):N{nn}, M{mm}, data{v} {}
+    Matrix(int nn, int mm, std::vector<T> && v):N{nn}, M{mm}, data{v} {}
 
-    Matrix<T>& operator=(Matrix const &)=default;
-    Matrix<T>& operator=(Matrix &&)=default;
+    Matrix(Matrix<T> const & m)=default;
+    Matrix(Matrix<T> && m):N{m.N}, M{m.M}, data{std::move(m.data)}{
+        m.N=0;
+        m.M=0;
+    }
+
+    Matrix<T>& operator=(Matrix<T> const & m)=default;
+    Matrix<T>& operator=(Matrix<T> && m){
+        if(&m == this){return *this;}
+        N=m.N;
+        M=m.M;
+        data=std::move(m.data);
+        m.N=0;
+        m.M=0;
+
+        return *this;
+    }
 
     Matrix<T>& operator+= (Matrix<T> const & m){
         std::transform(data.begin(), data.end(), m.data.begin(), data.begin(),
@@ -56,8 +72,7 @@ struct Matrix
 
 template<typename T>
 Matrix<T> operator+ (Matrix<T> const & m1, Matrix<T> const & m2){
-    Matrix<T> result={m1.N, m1.M};
-    result.data.resize(result.N*result.M);
+    Matrix<T> result(m1.N, m1.M);
         std::transform(m1.data.begin(), m1.data.end(), m2.data.begin(), result.data.begin(),
                        [](T const & element_m1, T const & element_m2){return element_m1+element_m2;});
         return result;                    
@@ -83,8 +98,7 @@ Matrix<T>&& operator+ (Matrix<T> && m1, Matrix<T> && m2){
 
 template<typename T>
 Matrix<T> operator- (Matrix<T> const & m1, Matrix<T> const & m2){
-    Matrix<T> result={m1.N, m1.M};
-    result.data.resize(result.N*result.M);
+    Matrix<T> result(m1.N, m1.M);
         std::transform(m1.data.begin(), m1.data.end(), m2.data.begin(), result.data.begin(),
                        [](T const & element_m1, T const & element_m2){return element_m1-element_m2;});
         return result;                    
@@ -110,16 +124,14 @@ Matrix<T>&& operator- (Matrix<T> && m1, Matrix<T> && m2){
 
 template<typename T>
 Matrix<T> operator* (Matrix<T> const & m, T const & a){
-    Matrix<T> result={m.N, m.M};
-    result.data.resize(result.N*result.M);
+    Matrix<T> result(m.N, m.M);
     std::transform(m.data.begin(), m.data.end(), result.data.begin(),
                     [&](T const & element_m){return element_m*a;});
     return result;
 }
 template<typename T>
 Matrix<T> operator* (T const & a, Matrix<T> const & m){
-    Matrix<T> result={m.N, m.M};
-    result.data.resize(result.N*result.M);
+    Matrix<T> result(m.N, m.M);
     std::transform(m.data.begin(), m.data.end(), result.data.begin(),
                     [&](T const & element_m){return element_m*a;});
     return result;
@@ -139,8 +151,7 @@ Matrix<T> && operator* ( T const & a, Matrix<T> && m){
 
 template<typename T>
 Matrix<T> operator/ (Matrix<T> const & m, T const & a){
-    Matrix<T> result={m.N, m.M};
-    result.data.resize(result.N*result.M);
+    Matrix<T> result(m.N, m.M);
     std::transform(m.data.begin(), m.data.end(), result.data.begin(),
                     [&](T const & element_m){return element_m/a;});
     return result;
@@ -153,13 +164,15 @@ Matrix<T> && operator/ (Matrix<T> && m, T const & a){
 }
 
 template<typename T>
-Matrix<T> dot (Matrix<T> const & m1, Matrix<T> const & m2){
-    Matrix<T> result={m1.N, m2.M, std::vector<T>(m1.N*m2.M, 0)};
+Matrix<T> operator* (Matrix<T> const & m1, Matrix<T> const & m2){
+    Matrix<T> result(m1.N, m2.M);
     for (int k=0; k<m1.N; ++k){ //step on result row
         for (int l=0; l<m2.M; ++l){ //step on result column
+            T accumulator=0;
             for (int j=0; j<m2.N; ++j){ //row*column
-                result.data[result.M*k+l]+=m1.data[m1.M*k+j]*m2.data[m2.M*j+l];
+                accumulator+=m1.data[m1.M*k+j]*m2.data[m2.M*j+l];
             }
+            result.data[result.M*k+l]=accumulator;
         }
     }
 
