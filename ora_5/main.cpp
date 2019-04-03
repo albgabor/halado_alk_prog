@@ -192,10 +192,8 @@ int main(int, char**) {
     {
         Vector2<double> v;
         std::cout << "\n---Test of '>>' operator---\n";
-        std::cout << "Vector2<double> v.x=\n";
-        std::cin >> v.x;
-        std::cout << "Vector2<double> v.y=\n";
-        std::cin >> v.y;
+        std::cout << "Vector2<double> v=\n";
+        std::cin >> v;
         std::cout << "v is: " << v << '\n';
     }
 
