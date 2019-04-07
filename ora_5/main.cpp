@@ -1,4 +1,5 @@
 #include "vector2.h"
+#include <sstream>
 
 int main(int, char**) {
     
@@ -191,15 +192,22 @@ int main(int, char**) {
     //Test >>
     {
         Vector2<double> v;
+		std::string const s1="3.1 4.5";
+		std::string const s2="4.3, 2.1";
         std::cout << "\n---Test of '>>' operator---\n";
-        std::cout << "Vector2<double> v=\n";
-        std::cin >> v;
-        std::cout << "v is: " << v << '\n';
+        std::cout << "Test with the first string (\"" << s1 << "\")\n";
+		std::istringstream ss1(s1);
+		ss1 >> v;
+		std::cout << "The Vector2 is: " << v << '\n';
+        std::cout << "Test with the second string (\"" << s2 << "\")\n";
+		std::istringstream ss2(s2);
+        ss2 >> v;
+		std::cout << "The Vector2 is: " << v << '\n';
     }
 
 
 
-    std::cout << "\nAll tests are successful!\n";
+    std::cout << "\nAll tests are done!\n";
     return 0;
 
 }

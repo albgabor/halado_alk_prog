@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <string>
 
 
 template <typename T>
@@ -67,19 +68,18 @@ T sqlength (Vector2<T> const & a){
     return (dot<T>(a, a));
 }
 
-//The type of return value will be double in all cases!!!
+//For return value see std::sqrt()
 template <typename T>
 auto length (Vector2<T> const & a){
     return std::sqrt(sqlength(a));
 }
 
- //The type of return value will be Vector2<double> in all cases!!!
 template <typename T>
-Vector2<T> normalize (Vector2<T> const & a){
+Vector2<T> normalize (Vector2<T> const & a, double num_zero=1e-14){
     
-    if ((a.x == T(0)) && (a.y == T(0))) {
-        std::cout << "The (0, 0) vector can't be normalized! (0.0, 0.0) is returned.\n";
-        return Vector2<T>{0, 0};
+    if (length(a)<=num_zero) {
+        std::cout << "The vector is numerically zero, shouldn't be normalized! The input Vector2 is returned.\n";
+        return a;
     } else {
         auto len=length(a);
         return Vector2<T> {T(a.x/len), T(a.y/len)};
@@ -92,9 +92,20 @@ std::ostream & operator<< ( std::ostream& o, Vector2<T> const & v){
     return o;
 }
 
+
+//The >> waits for numbers, separated with whitespaces.
 template <typename T>
-std::istream & operator>> ( std::istream& i, Vector2<T> & v){
-    i>>v.x;
-    i>>v.y;
-    return i;
+std::istream & operator>> ( std::istream& s, Vector2<T> & v){
+    const auto state = s.rdstate();
+    const auto pos = s.tellg();
+    
+    s >> v.x;
+    s >> v.y;
+    if (s.fail()) {
+        std::cout << "Something went wrong during read data (with >>) into Vector2. (Stream is reseted to input state.)\n";
+        s.seekg(pos);
+        s.setstate(state);
+    }
+
+    return s;
 }
