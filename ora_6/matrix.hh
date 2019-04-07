@@ -24,7 +24,7 @@ struct Matrix
     Matrix():N{0}, M{0}, data{std::vector<T>()} {}
     Matrix(int nn, int mm):N{nn}, M{mm}, data{std::vector<T>(nn*mm)} {}
     Matrix(int nn, int mm, std::vector<T> const & v):N{nn}, M{mm}, data{v} {}
-    Matrix(int nn, int mm, std::vector<T> && v):N{nn}, M{mm}, data{v} {}
+    Matrix(int nn, int mm, std::vector<T> && v):N{nn}, M{mm}, data{std::move(v)} {}
 
     Matrix(Matrix<T> const & m)=default;
     Matrix(Matrix<T> && m):N{m.N}, M{m.M}, data{std::move(m.data)}{
@@ -133,7 +133,7 @@ template<typename T>
 Matrix<T> operator* (T const & a, Matrix<T> const & m){
     Matrix<T> result(m.N, m.M);
     std::transform(m.data.begin(), m.data.end(), result.data.begin(),
-                    [&](T const & element_m){return element_m*a;});
+                    [&](T const & element_m){return a*element_m;});
     return result;
 }
 template<typename T>
@@ -177,4 +177,74 @@ Matrix<T> operator* (Matrix<T> const & m1, Matrix<T> const & m2){
     }
 
     return result;
+}
+
+
+template<typename T>
+std::ostream & operator<< (std::ostream & o, Matrix<T> const & m) {
+    o << m.N << '\t' << m.M << '\n';
+    for (int k=0; k<m.N; ++k){
+        for (int l=0; l<m.M; ++l){
+            o<<m(k, l)<<'\t';
+        }
+        o<<'\n';
+    }
+    o<<'\n';
+
+    return o;
+}
+
+
+/*
+In the beggining there should be two integers, corresponding to the size of Matrix.
+Simply reads data in Matrix element by element (doesn't check the structure).
+(Tries to read as many elements as the size of Matrix.)
+Everything should be separated with (any kind of) whitespaces.
+*/
+template<typename T>
+std::istream & operator>> (std::istream & s, Matrix<T> & m) {
+    const auto state = s.rdstate();
+    const auto pos = s.tellg();    
+
+    int nn;
+    int mm;
+    s >> nn;
+    s >> mm;
+
+    if(s.fail()) {
+        std::cout << "Error at read in the size of Matrix. (Stream is reseted to input state.)\n";
+        s.seekg(pos);
+        s.setstate(state);
+        return s;
+    }
+
+    if ( (nn == 0) || (mm == 0) ){
+        std::cout << "Can not read in empty Matrix. (N or M is zero.) (Stream is reseted to input state.)\n";
+        s.seekg(pos);
+        s.setstate(state);
+        return s;
+    }
+
+    if( nn*mm != m.N*m.M) {
+        m=Matrix<T>(nn, mm);
+    } else {
+        m.N=nn;
+        m.M=mm;
+    }
+    
+    for (int k=0; k<m.N; ++k) {
+        for (int l=0; l<m.M; ++l){
+            s >> m(k, l);
+            
+            if (s.fail()) {
+                std::cout << "Something went wrong during read data (with >>) into Matrix at element: (" << k << ", " << l << ")\n\t(Stream is reseted to input state.)\n";
+                s.seekg(pos);
+                s.setstate(state);
+                return s;
+            }
+        }
+    }
+
+    return s;
+    
 }

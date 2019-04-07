@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include "matrix.hh"
 
 int main(int, char**) {
@@ -538,7 +539,55 @@ int main(int, char**) {
 			 b(2, 0) != 4.5 || b(2, 1) != 9.3     ) { err("operator* test (l-value, l-value) [src elements]"); }
 	}
 
-    std::cout << "All tests are successful!\n";
+	//Test << operator
+	{
+		Matrix<double> a   = {2, 3, {3.1, 5.2, 9.3, 4.1, 2.5, 1.3}};
+		if(a.data.size()   != 6)  { err("operator<< test [src size]");     }
+		if(a.N != 2) { err("operator<< test [src N]");     }
+		if(a.M != 3) { err("operator<< test [src M]");     }
+		std::string ref="2\t3\n3.1\t5.2\t9.3\t\n4.1\t2.5\t1.3\t\n\n";
+		std::ostringstream result;
+		result << a;
+		if (result.str() != ref) {err("operator<< test [string]");}
+	}
+
+
+	//Test >> operator
+	{
+		std::string input="2\t3\n3.1\t5.2\t9.3\t\n4.1\t2.5\t1.3\t\n\n";
+		Matrix<double> ref   = {2, 3, {3.1, 5.2, 9.3, 4.1, 2.5, 1.3}};
+		Matrix<double> a;
+		std::istringstream iss(input);
+		iss >> a;
+		if(a.data.size()   != 6)  { err("operator>> test [size]");     }
+		if(a.N != 2) { err("operator>> test [N]");     }
+		if(a.M != 3) { err("operator>> test [M]");     }
+		if(std::abs(ref(0, 0)-a(0, 0)) > 1e-15 ||
+		   std::abs(ref(0, 1)-a(0, 1)) > 1e-15 || 
+		   std::abs(ref(0, 2)-a(0, 2)) > 1e-15 || 
+		   std::abs(ref(1, 0)-a(1, 0)) > 1e-15 ||
+		   std::abs(ref(1, 1)-a(1, 1)) > 1e-15 || 
+			 std::abs(ref(1, 2)-a(1, 2)) > 1e-15   ){ err("operator>> test [value]"); }
+	
+	}
+
+	/* Extra test for Matrix<Matrix<double>> */
+	//Some how there is one extra tab before the size of the second matrix.
+	/*
+	{
+		std::cout << "-----Test for Matrix in Matrix read and write:-----\n";
+		std::cout << "The input string:\n";
+		std::string i2="1\t2\n2\t1\n3.1\t\n2.3\t\n\n2\t1\n4.5\t\n1.2\t\n\n";
+		std::cout << i2;
+		Matrix<Matrix<double>> m;
+		std::istringstream iss2(i2);
+		iss2 >> m;
+		std::cout << "The output string:\n";
+		std::cout << m;
+	}
+	*/
+
+  std::cout << "All tests are done! No problem found.\n";
 		
 return 0;
 }
