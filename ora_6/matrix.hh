@@ -26,6 +26,13 @@ struct Matrix
     Matrix(int nn, int mm, std::vector<T> const & v):N{nn}, M{mm}, data{v} {}
     Matrix(int nn, int mm, std::vector<T> && v):N{nn}, M{mm}, data{std::move(v)} {}
 
+    template<typename F>
+    Matrix(int nn, int mm, F f):N{nn}, M{mm}, data{std::vector<T>(nn*mm)} {
+        for (int k=0; k<nn; ++k) {
+            for (int l=0; l<mm; ++l) {data[k*mm+l]=f(k, l);}
+        }
+    }
+
     Matrix(Matrix<T> const & m)=default;
     Matrix(Matrix<T> && m):N{m.N}, M{m.M}, data{std::move(m.data)}{
         m.N=0;

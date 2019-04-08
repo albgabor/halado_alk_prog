@@ -27,6 +27,20 @@ int main(int, char**) {
 		if( ++ ++ ++ ++ ++ ++(a.data.cbegin()) != a.data.cend() )       { err("initializer list constructor test [cbegin + 6 == cend]"); }
 	}
 
+	//Test function constructor:
+	{
+		Matrix<double> ref = {2,3,{0.0,1.0,2.0,10.0,11.0,12.0}};
+		Matrix<double> a{2,3, [](int k, int l){return k*10.0+l;}};
+		if(a.N != 2)                            { err("function constructor test [N]");               }
+		if(a.M != 3)                            { err("function constructor test [M]");               }
+		if(std::abs(ref(0, 0)-a(0, 0)) > 1e-15 ||
+		   std::abs(ref(0, 1)-a(0, 1)) > 1e-15 || 
+		   std::abs(ref(0, 2)-a(0, 2)) > 1e-15 || 
+		   std::abs(ref(1, 0)-a(1, 0)) > 1e-15 ||
+		   std::abs(ref(1, 1)-a(1, 1)) > 1e-15 || 
+			 std::abs(ref(1, 2)-a(1, 2)) > 1e-15   ) { err("function constructor test [elements]"); }
+	}
+
 	//Test copy constructor:
 	{
 		Matrix<double> a = {2, 3, {3.1, 5.2, 9.3, 4.1, 2.5, 1.3}};
