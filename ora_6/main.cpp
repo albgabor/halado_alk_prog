@@ -586,8 +586,7 @@ int main(int, char**) {
 	}
 
 	/* Extra test for Matrix<Matrix<double>> */
-	//Some how there is one extra tab before the size of the second matrix.
-	/*
+/*	
 	{
 		std::cout << "-----Test for Matrix in Matrix read and write:-----\n";
 		std::cout << "The input string:\n";
@@ -599,7 +598,7 @@ int main(int, char**) {
 		std::cout << "The output string:\n";
 		std::cout << m;
 	}
-	*/
+*/	
 
   std::cout << "All tests are done! No problem found.\n";
 		

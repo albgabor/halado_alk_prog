@@ -177,7 +177,7 @@ Matrix<T> operator* (Matrix<T> const & m1, Matrix<T> const & m2){
         for (int l=0; l<m2.M; ++l){ //step on result column
             T accumulator=0;
             for (int j=0; j<m2.N; ++j){ //row*column
-                accumulator+=m1.data[m1.M*k+j]*m2.data[m2.M*j+l];
+                accumulator+=m1(k, j)*m2(j, l);
             }
             result.data[result.M*k+l]=accumulator;
         }
@@ -213,43 +213,42 @@ std::istream & operator>> (std::istream & s, Matrix<T> & m) {
     const auto state = s.rdstate();
     const auto pos = s.tellg();    
 
+    bool fail=false;
+
     int nn;
     int mm;
     s >> nn;
     s >> mm;
 
     if(s.fail()) {
-        std::cout << "Error at read in the size of Matrix. (Stream is reseted to input state.)\n";
-        s.seekg(pos);
-        s.setstate(state);
-        return s;
-    }
-
-    if ( (nn == 0) || (mm == 0) ){
-        std::cout << "Can not read in empty Matrix. (N or M is zero.) (Stream is reseted to input state.)\n";
-        s.seekg(pos);
-        s.setstate(state);
-        return s;
-    }
-
-    if( nn*mm != m.N*m.M) {
-        m=Matrix<T>(nn, mm);
-    } else {
-        m.N=nn;
-        m.M=mm;
-    }
+        std::cout << "Error at read in the size of Matrix. (Stream is reseted to input state, Matrix didn't change.)\n";
+        fail=true;
+    } else if ( (nn == 0) || (mm == 0) ){
+        std::cout << "Can not read in empty Matrix. (N or M is zero.) (Stream is reseted to input state, Matrix didn't change.)\n";
+        fail=true;
+    } 
     
-    for (int k=0; k<m.N; ++k) {
-        for (int l=0; l<m.M; ++l){
-            s >> m(k, l);
-            
+    if (!fail){
+        std::vector<T> temp(nn*mm);
+        for (int k=0; k<nn*mm; ++k) {
+            s >> temp[k];
             if (s.fail()) {
-                std::cout << "Something went wrong during read data (with >>) into Matrix at element: (" << k << ", " << l << ")\n\t(Stream is reseted to input state.)\n";
-                s.seekg(pos);
-                s.setstate(state);
-                return s;
+                std::cout << "Something went wrong during read data (with >>) into Matrix at element: (" << k/mm << ", " << k-k/mm << ")\n\t(Stream is reseted to input state, Matrix didn't change.)\n";
+                fail=true;
+                break;
             }
         }
+
+        if (!fail) {
+            m.N=nn;
+            m.M=mm;
+            m.data=std::move(temp);
+        }
+    }
+
+    if (fail) {
+        s.seekg(pos);
+        s.setstate(state);
     }
 
     return s;
