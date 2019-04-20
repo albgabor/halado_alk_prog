@@ -184,9 +184,10 @@ int main(int, char**) {
     //Test <<
     {
         Vector2<double> v={2.0, 3.0};
-        std::cout << "\n---Test of '<<' operator---\n";
-        std::cout << "v.x is: " << v.x << "\tv.y is: " << v.y << '\n';
-        std::cout << "v is: " << v << '\n';
+		std::string ref="2 3";
+ 		std::ostringstream result;
+		result << v;
+		if (result.str() != ref) {err("operator<< test [string]");}
     }
 
     //Test >>
@@ -194,15 +195,15 @@ int main(int, char**) {
         Vector2<double> v;
 		std::string const s1="3.1 4.5";
 		std::string const s2="4.3, 2.1";
-        std::cout << "\n---Test of '>>' operator---\n";
-        std::cout << "Test with the first string (\"" << s1 << "\")\n";
+		Vector2<double> ref={3.1, 4.5};
+
 		std::istringstream ss1(s1);
 		ss1 >> v;
-		std::cout << "The Vector2 is: " << v << '\n';
-        std::cout << "Test with the second string (\"" << s2 << "\")\n";
+		if ((v.x != ref.x) || (v.y != ref.y)) {err("operator>> test [value]");}
+        std::cout << "\nTest of '>>' operator, there should be some 'error' message after this:\n";
 		std::istringstream ss2(s2);
         ss2 >> v;
-		std::cout << "The Vector2 is: " << v << '\n';
+		if ((v.x != ref.x) || (v.y != ref.y)) {err("operator>> test [value]");}
     }
 
 

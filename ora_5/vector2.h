@@ -88,7 +88,7 @@ Vector2<T> normalize (Vector2<T> const & a, double num_zero=1e-14){
 
 template <typename T>
 std::ostream & operator<< ( std::ostream& o, Vector2<T> const & v){
-    o<<v.x <<"   "<<v.y;
+    o<<v.x <<' '<<v.y;
     return o;
 }
 
@@ -99,13 +99,18 @@ std::istream & operator>> ( std::istream& s, Vector2<T> & v){
     const auto state = s.rdstate();
     const auto pos = s.tellg();
     
-    s >> v.x;
-    s >> v.y;
+    T x;
+    T y;
+    s >> x;
+    s >> y;
     if (s.fail()) {
-        std::cout << "Something went wrong during read data (with >>) into Vector2. (Stream is reseted to input state.)\n";
+        std::cout << "Something went wrong during read data (with >>) into Vector2. (Stream is reseted to input state, Vector2 didn't change.)\n";
         s.seekg(pos);
         s.setstate(state);
+    } else {
+    v.x=x;
+    v.y=y;
     }
-
+    
     return s;
 }
