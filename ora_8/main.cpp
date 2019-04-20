@@ -10,12 +10,7 @@ int main(int, char**) {
     std::uniform_real_distribution<double> distr(0.0, 1.0);
 
     std::chrono::high_resolution_clock my_clock;
-    
-    for (int i=0; i<1e+8; --i) {++i; ++i;}
-    
-
-    //std::cout << Matrix<double>{5, 5, [&](int r, int h){return distr(gen);}};
-
+        
     double dt;
     int n=100;
     std::ofstream rs;
