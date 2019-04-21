@@ -76,13 +76,12 @@ auto length (Vector2<T> const & a){
 
 template <typename T>
 Vector2<T> normalize (Vector2<T> const & a, double num_zero=1e-14){
-    
-    if (length(a)<=num_zero) {
+    auto len=length(a);
+    if (double(len)<=num_zero) {
         std::cout << "The vector is numerically zero, shouldn't be normalized! The input Vector2 is returned.\n";
         return a;
     } else {
-        auto len=length(a);
-        return Vector2<T> {T(a.x/len), T(a.y/len)};
+        return Vector2<T> {a/len};
     }
 }
 
@@ -103,7 +102,7 @@ std::istream & operator>> ( std::istream& s, Vector2<T> & v){
     T y;
     s >> x;
     s >> y;
-    if (s.fail()) {
+    if (!s) {
         std::cout << "Something went wrong during read data (with >>) into Vector2. (Stream is reseted to input state, Vector2 didn't change.)\n";
         s.seekg(pos);
         s.setstate(state);
