@@ -13,8 +13,7 @@ int main(int, char**) {
         
     double dt;
     int n=100;
-    std::ofstream rs;
-    rs.open("result.txt");
+    std::ofstream rs("result.txt");
     rs << std::fixed;
     do
     {
@@ -32,5 +31,4 @@ int main(int, char**) {
     rs << n << '\t' << dt << '\n';
     n+=25;
     } while (dt<1e+3);
-        
 }

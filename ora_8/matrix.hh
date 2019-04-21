@@ -22,14 +22,14 @@ struct Matrix
 
 
     Matrix():N{0}, M{0}, data{std::vector<T>()} {}
-    Matrix(int nn, int mm):N{nn}, M{mm}, data{std::vector<T>(nn*mm)} {}
+    Matrix(int nn, int mm):N{nn}, M{mm}, data(nn*mm) {}
     Matrix(int nn, int mm, std::vector<T> const & v):N{nn}, M{mm}, data{v} {}
     Matrix(int nn, int mm, std::vector<T> && v):N{nn}, M{mm}, data{std::move(v)} {}
 
     template<typename F>
-    Matrix(int nn, int mm, F f):N{nn}, M{mm}, data{std::vector<T>(nn*mm)} {
+    Matrix(int nn, int mm, F f):N{nn}, M{mm}, data(nn*mm) {
         for (int k=0; k<nn; ++k) {
-            for (int l=0; l<mm; ++l) {data[k*mm+l]=f(k, l);}
+            for (int l=0; l<mm; ++l) {(*this)(k, l)=f(k, l);}
         }
     }
 
@@ -179,7 +179,7 @@ Matrix<T> operator* (Matrix<T> const & m1, Matrix<T> const & m2){
             for (int j=0; j<m2.N; ++j){ //row*column
                 accumulator+=m1(k, j)*m2(j, l);
             }
-            result.data[result.M*k+l]=accumulator;
+            result(k, l)=accumulator;
         }
     }
 
@@ -248,6 +248,7 @@ std::istream & operator>> (std::istream & s, Matrix<T> & m) {
 
     if (fail) {
         s.seekg(pos);
+        s.clear();
         s.setstate(state);
     }
 
