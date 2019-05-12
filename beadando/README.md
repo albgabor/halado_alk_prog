@@ -1,4 +1,4 @@
-# A compton szórást implementáltam
+# A Compton-szórást implementáltam
 
 ## Példa:
 
