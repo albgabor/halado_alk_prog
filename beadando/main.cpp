@@ -183,7 +183,7 @@ void pipeSimulation(int photonNum, std::string filename="energy_hist.dat", int s
     for (int k=0; k<savedOrderOfScat+1; ++k){
         std::cout << k << '\t' << 100.0*scatteredNTimes[k]/photonNum << '\n';
     }
-    std::cout << savedOrderOfScat << "+\t" << 100.0*scatteredNTimes[savedOrderOfScat+2]/photonNum << '\n';
+    std::cout << savedOrderOfScat << "+\t" << 100.0*scatteredNTimes[savedOrderOfScat+1]/photonNum << '\n';
     
    std::ofstream ofs(filename);
    ofs << "#energy (keV)\ttotal count\tcounts for increasing scattering numbers (from 1)\n";
@@ -252,7 +252,7 @@ int main(int, char**) {
     for (int k=0; k<savedOrderOfScat+1; ++k){
         std::cout << k << '\t' << 100.0*scatteredNTimes[k]/photonNum << '\n';
     }
-    std::cout << savedOrderOfScat << "+\t" << 100.0*scatteredNTimes[savedOrderOfScat+2]/photonNum << '\n';
+    std::cout << savedOrderOfScat << "+\t" << 100.0*scatteredNTimes[savedOrderOfScat+1]/photonNum << '\n';
     
     }
 
