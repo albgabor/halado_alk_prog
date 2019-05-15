@@ -13,10 +13,6 @@ A többszálas szorzás a matrix.hh végén van.
 
 "many": annyi új szálat indítottam, amekkorák a (négyzetes) mátrixok voltak.
 
-#### Megjegyzés:
-
-Az itthoni gépemben 2 fizikai mag van (de mutithreading-el 4 szálon tud futtatni).
-
 ### Ábrák:
 
 "total.pdf": Minden ábrázolva van rajta.
@@ -26,3 +22,9 @@ Az itthoni gépemben 2 fizikai mag van (de mutithreading-el 4 szálon tud futtat
 "2nd...": A futtatási tartomány második harmada.
 
 "3rd...": A futtatási tartomány harmadik harmada.
+
+
+#### Megjegyzés:
+
+Az itthoni gépemben 2 fizikai mag van (de mutithreading-el 4 szálon tud futtatni).
+
