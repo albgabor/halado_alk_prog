@@ -10,4 +10,4 @@ Függőleges 4 szál: 11,58 ms
 
 Vízszintes 4 szál: 11,46 ms
 
-## A parallel STL-el valamért nem akart lefordulni nálam. (Windows-on, MSVC 14.16-al.)
+## A parallel STL-el valamért nem akart lefordulni nálam. (Windows 7-en, MSVC 14.16-al.)
