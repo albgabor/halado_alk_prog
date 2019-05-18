@@ -1,11 +1,13 @@
 # Függőlegesen és vízszintesen felosztott élet játék:
 
-Függőleges 2 szál:
+(1920x1028-as méret, 200 lépésenkénti átlagok minimuma)
 
-Vízszintes 2 szál:
+Függőleges 2 szál: 15,05 ms
 
-Függőleges 4 szál:
+Vízszintes 2 szál: 15,55 ms
 
-Vízszintes 4 szál:
+Függőleges 4 szál: 11,58 ms
+
+Vízszintes 4 szál: 11,46 ms
 
 ## A parallel STL-el valamért nem akart lefordulni nálam. (Windows-on, MSVC 14.16-al.)
