@@ -107,6 +107,7 @@ void scatterUniformPhi(__global double * theta,__global  double * phi,__global  
 
 //follows 'size' number of photons, until they leave pipe (up to 10000 steps)
 //(if a photon didn't leave the pipe, it's simulation will continoue in the next "round")
+//the counter tells how many "rounds" were already simulated
 __kernel void stepInPipe(double electronDensity, double outerRadius,
                          double innerRadius, double stepLength, int size, int counter,
                          __global double * x, __global double * y, __global double * z,
