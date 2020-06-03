@@ -8,4 +8,4 @@ cannot open source file "CL/opencl.h" (dependency of "CLEXT/CL/cl2.hpp")
 
 De ettől még lefordul  és lefut a program.
 
-A szimulált spektrumok a my_spectrum_\*.png-ben vannak.
+A szimulált spektrumok a my_spectrum_\*.png-ben vannak. Az irodalmi spektrum a spectrum_of_pipe.jpg-ben van.
