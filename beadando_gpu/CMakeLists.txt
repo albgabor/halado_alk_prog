@@ -12,7 +12,7 @@ get_filename_component(Folder_KRNS
    ABSOLUTE)
 
 
-add_executable(bead_gpu main.cpp scatter.hh cl2.hpp ${Files_KRNS})
+add_executable(bead_gpu main.cpp ${Files_KRNS})
 
 set_target_properties(${PROJECT_NAME}
    PROPERTIES
